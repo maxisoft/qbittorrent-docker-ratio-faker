@@ -34,5 +34,8 @@ cd "$HOME" && rm -rf libtorrent ninja boost_1_79_0 boost_1_79_0.tar.gz
 # use qbittorrent docker image from linuxserver as base
 # the resulting image will multiply uploaded bytes by a factor of 2 (by default)
 from ghcr.io/linuxserver/qbittorrent:4.4.3.1-r0-ls198
-COPY --from=builder /output/lib/*  /usr/local/lib/
-ENV LIB_TORRENT_UPLOAD_MULT=2
+ARG LIB_TORRENT_UPLOAD_MULT=2.0
+ARG maintainer="maxisoft"
+LABEL maintainer="${maintainer}" name="qbittorrent-docker-ratio-faker" description="Qbittorent with built in fake ratio multiplier" url="https://github.com/${maintainer}/qbittorrent-docker-ratio-faker" vcs-url="https://github.com/${maintainer}/qbittorrent-docker-ratio-faker" org.opencontainers.image.source="https://github.com/${maintainer}/qbittorrent-docker-ratio-faker"
+COPY --from=builder /output/lib/* /usr/local/lib/
+ENV LIB_TORRENT_UPLOAD_MULT=${LIB_TORRENT_UPLOAD_MULT}
