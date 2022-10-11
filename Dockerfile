@@ -3,7 +3,7 @@
 # like that we are sure to not fall in dependecy version hell
 
 # Commands are taken from qbittorrent wiki pages
-from alpine:3.16 as builder
+FROM alpine:3.16 as builder
 RUN \
 apk --no-cache add --virtual qdev autoconf automake build-base cmake curl git libtool linux-headers perl pkgconf python3 python3-dev re2c tar && \
 apk --no-cache add --virtual runtime icu-dev libexecinfo-dev openssl-dev qt5-qtbase-dev qt5-qttools-dev zlib-dev qt5-qtsvg-dev && \
@@ -33,7 +33,7 @@ cd "$HOME" && rm -rf libtorrent ninja boost_1_79_0 boost_1_79_0.tar.gz
 
 # use qbittorrent docker image from linuxserver as base
 # the resulting image will multiply uploaded bytes by a factor of 2 (by default)
-from ghcr.io/linuxserver/qbittorrent:4.4.3.1-r0-ls198
+FROM ghcr.io/linuxserver/qbittorrent:4.4.5-r0-ls221
 ARG LIB_TORRENT_UPLOAD_MULT=2.0
 ARG maintainer="maxisoft"
 LABEL maintainer="${maintainer}" name="qbittorrent-docker-ratio-faker" description="Qbittorent with built in fake ratio multiplier" url="https://github.com/${maintainer}/qbittorrent-docker-ratio-faker" vcs-url="https://github.com/${maintainer}/qbittorrent-docker-ratio-faker" org.opencontainers.image.source="https://github.com/${maintainer}/qbittorrent-docker-ratio-faker"
