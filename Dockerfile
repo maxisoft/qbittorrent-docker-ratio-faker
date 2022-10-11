@@ -15,13 +15,13 @@ cmake -Wno-dev -B build \
 	-D CMAKE_INSTALL_PREFIX="/usr/local" && \
 cmake --build build && \
 cmake --install build && \
-curl -sNLk https://boostorg.jfrog.io/artifactory/main/release/1.79.0/source/boost_1_79_0.tar.gz -o "$HOME/boost_1_79_0.tar.gz" && \
-tar xf "$HOME/boost_1_79_0.tar.gz" -C "$HOME" && \
+curl -sNLk https://boostorg.jfrog.io/artifactory/main/release/1.80.0/source/boost_1_80_0.tar.gz -o "$HOME/boost_1_80_0.tar.gz" && \
+tar xf "$HOME/boost_1_80_0.tar.gz" -C "$HOME" && \
 git clone -b mult --shallow-submodules --recurse-submodules https://github.com/maxisoft/libtorrent.git ~/libtorrent && cd ~/libtorrent && \
 cmake -Wno-dev -G Ninja -B build \
     -D CMAKE_BUILD_TYPE="Release" \
     -D CMAKE_CXX_STANDARD=17 \
-    -D BOOST_INCLUDEDIR="$HOME/boost_1_79_0/" \
+    -D BOOST_INCLUDEDIR="$HOME/boost_1_80_0/" \
     -D CMAKE_INSTALL_LIBDIR="lib" \
     -D CMAKE_INSTALL_PREFIX="/usr/local" && \
 cmake --build build && \
@@ -29,7 +29,7 @@ cmake --install build && \
 mkdir -p /output/lib && \
 cp -a /usr/local/lib/libtorrent*.so* /output/lib/ && \
 apk del --purge qdev && apk del --purge runtime && \
-cd "$HOME" && rm -rf libtorrent ninja boost_1_79_0 boost_1_79_0.tar.gz
+cd "$HOME" && rm -rf libtorrent ninja boost_1_80_0 boost_1_80_0.tar.gz
 
 # use qbittorrent docker image from linuxserver as base
 # the resulting image will multiply uploaded bytes by a factor of 2 (by default)
