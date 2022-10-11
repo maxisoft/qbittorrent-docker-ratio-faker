@@ -6,7 +6,7 @@
 FROM alpine:edge as builder
 RUN \
 apk --no-cache add --virtual qdev autoconf automake build-base cmake curl git libtool linux-headers perl pkgconf python3 python3-dev re2c tar && \
-apk --no-cache add --virtual runtime icu-dev libexecinfo-dev openssl-dev qt5-qtbase-dev qt5-qttools-dev zlib-dev qt5-qtsvg-dev && \
+apk --no-cache add --virtual runtime icu-dev openssl-dev qt5-qtbase-dev qt5-qttools-dev zlib-dev qt5-qtsvg-dev && \
 git clone --shallow-submodules --recurse-submodules https://github.com/ninja-build/ninja.git ~/ninja && cd ~/ninja && \
 git checkout "$(git tag -l --sort=-v:refname "v*" | head -n 1)" && \
 cmake -Wno-dev -B build \
