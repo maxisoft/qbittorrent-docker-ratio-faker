@@ -6,7 +6,7 @@ on:
     branches: [ main ]
 
 concurrency: 
-  group: ${{ github.workflow }}-${{ github.ref == 'refs/heads/main' && ${{ github.actor }} == ${{ github.repository_owner }} && github.event_name == 'push' }}
+  group: ${{ github.workflow }}-${{ github.ref == 'refs/heads/main' && github.actor == github.repository_owner && github.event_name == 'push' }}
 
 jobs:
 
@@ -27,7 +27,7 @@ jobs:
       run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
       
     - name: Build/Publish Dockerfile (testing)
-      if: github.ref != 'refs/heads/main' || ${{ github.actor }} != ${{ github.repository_owner }} || github.event_name == 'pull_request'
+      if: github.ref != 'refs/heads/main' || github.actor != github.repository_owner || github.event_name == 'pull_request'
       timeout-minutes: 360
       run: |
             set -x
@@ -41,7 +41,7 @@ jobs:
             --tag ghcr.io/${{ github.repository_owner }}/qbittorrent-docker-ratio-faker/qbittorrent-docker-ratio-faker-testing:latest
 
     - name: Build/Publish Dockerfile (main)
-      if: success() && github.ref == 'refs/heads/main' && ${{ github.actor }} == ${{ github.repository_owner }} && github.event_name == 'push'
+      if: success() && github.ref == 'refs/heads/main' && github.actor == github.repository_owner && github.event_name == 'push'
       timeout-minutes: 360
       run: |
             set -x
