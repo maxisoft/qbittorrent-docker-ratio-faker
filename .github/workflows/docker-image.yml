@@ -2,7 +2,6 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ main ]
   pull_request:
     branches: [ main ]
 
@@ -24,12 +23,12 @@ jobs:
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
       
-    - name: Build/Publish Dockerfile
-      if: success() && github.ref != 'refs/heads/main'
+    - name: Build/Publish Dockerfile (testing)
+      if: github.ref != 'refs/heads/main' || ${{ github.actor }} != ${{ github.repository_owner }} || github.event_name == 'pull_request'
       timeout-minutes: 360
       run: |
             set -x
-            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
 
             docker buildx build \
             --platform=linux/amd64,linux/arm/v7,linux/arm64/v8 \
@@ -38,12 +37,12 @@ jobs:
             --file Dockerfile . \
             --tag ghcr.io/${{ github.repository_owner }}/qbittorrent-docker-ratio-faker/qbittorrent-docker-ratio-faker-testing:latest
 
-    - name: Build/Publish Dockerfile
-      if: success() && github.ref == 'refs/heads/main'
+    - name: Build/Publish Dockerfile (main)
+      if: success() && github.ref == 'refs/heads/main' && ${{ github.actor }} == ${{ github.repository_owner }}
       timeout-minutes: 360
       run: |
             set -x
-            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
             docker buildx build \
             --platform=linux/amd64,linux/arm/v7,linux/arm64/v8 \
             --output "type=image,push=true" \
