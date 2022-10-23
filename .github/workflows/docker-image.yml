@@ -5,6 +5,9 @@ on:
   pull_request:
     branches: [ main ]
 
+concurrency: 
+  group: ${{ github.workflow }}-${{ github.ref == 'refs/heads/main' && ${{ github.actor }} == ${{ github.repository_owner }} && github.event_name == 'push' }}
+
 jobs:
 
   build:
@@ -38,7 +41,7 @@ jobs:
             --tag ghcr.io/${{ github.repository_owner }}/qbittorrent-docker-ratio-faker/qbittorrent-docker-ratio-faker-testing:latest
 
     - name: Build/Publish Dockerfile (main)
-      if: success() && github.ref == 'refs/heads/main' && ${{ github.actor }} == ${{ github.repository_owner }}
+      if: success() && github.ref == 'refs/heads/main' && ${{ github.actor }} == ${{ github.repository_owner }} && github.event_name == 'push'
       timeout-minutes: 360
       run: |
             set -x
