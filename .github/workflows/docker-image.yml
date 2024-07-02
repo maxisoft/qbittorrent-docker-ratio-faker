@@ -34,7 +34,7 @@ jobs:
             echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
 
             docker buildx build \
-            --platform=linux/amd64,linux/arm/v7,linux/arm64/v8 \
+            --platform=linux/amd64,linux/arm64/v8 \
             --output "type=image,push=true" \
             --build-arg maintainer=${{ github.repository_owner }} \
             --file Dockerfile . \
@@ -47,7 +47,7 @@ jobs:
             set -x
             echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
             docker buildx build \
-            --platform=linux/amd64,linux/arm/v7,linux/arm64/v8 \
+            --platform=linux/amd64,linux/arm64/v8 \
             --output "type=image,push=true" \
             --build-arg maintainer=${{ github.repository_owner }} \
             --file Dockerfile . \
